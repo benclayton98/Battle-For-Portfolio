@@ -1,10 +1,10 @@
-let paralyseChance, poisonChance;
+let cpuGo;
 
-class Gameplay {
-  constructor(hpPlayer1 = 100, hpPlayer2 = 100) {
+class SingleGame {
+  constructor(hpPlayer1 = 100, CPU = 100) {
     this.go = true;
     this.hpPlayer1 = hpPlayer1;
-    this.hpPlayer2 = hpPlayer2;
+    this.CPU = CPU;
   }
 
   reducePoint(value) {
@@ -18,21 +18,31 @@ class Gameplay {
     return "you lose";
   }
 
+// math.random = if between 0 and 2, normal attack, if between 2 and 4 paralyse etc..
+
+
   randomPlayer() {
-    if (this.go) {
-      this.hpPlayer1 = this.reducePoint(this.hpPlayer1);
-      this.go = false;
-      if (this.hpPlayer1 == "you lose") {
-        this.hpPlayer2 = "you win";
+      cpuGo = Math.random()
+      this.CPU = this.reducePoint(this.CPU);
+      
+      if(cpu<0.7){
+      this.hpPlayer1 = this.reducePoint(this.hpPlayer1)
       }
-    } else {
-      this.hpPlayer2 = this.reducePoint(this.hpPlayer2);
-      this.go = true;
-      if (this.hpPlayer2 == "you lose") {
+      else if(cpu<0.8){
+          this.hpPlayer1.paralyse()
+      }
+      else if(cpu<0.9){
+          this.hpPlayer1.poison()
+      }
+      else if(cpu<1){
+          this.hpPlayer1.heal()
+      }
+      
+      if (this.CPU == "you lose") {
         this.hpPlayer1 = "you win";
       }
     }
-  }
+  
 
   paralyse() {
     paralyseChance = Math.random()
@@ -46,18 +56,18 @@ class Gameplay {
       this.go = false;}
 
       if (this.hpPlayer1 == "you lose") {
-        this.hpPlayer2 = "you win";
+        this.CPU = "you win";
       }
     } 
   else {
-      this.hpPlayer2 = this.reducePoint(this.hpPlayer2);
+      this.CPU = this.reducePoint(this.CPU);
       
       if(paralyseChance<0.1){
         this.go=false;
       }
       else{
       this.go = true;}
-      if (this.hpPlayer2 == "you lose") {
+      if (this.CPU == "you lose") {
         this.hpPlayer1 = "you win";
       }
     }
@@ -69,18 +79,18 @@ class Gameplay {
       this.hpPlayer1 = this.reducePoint(this.hpPlayer1);
 
       if(poisonChance<0.2){
-        this.hpPlayer2 = this.hpPlayer2 - 3;
+        this.CPU = this.CPU - 3;
         this.go=false;
       }
       else{
       this.go = false;}
 
       if (this.hpPlayer1 == "you lose") {
-        this.hpPlayer2 = "you win";
+        this.CPU = "you win";
       }
     } 
   else {
-      this.hpPlayer2 = this.reducePoint(this.hpPlayer2);
+      this.CPU = this.reducePoint(this.CPU);
       
       if(poisonChance<0.2){
         this.hpPlayer1 = this.hpPlayer1 - 3;
@@ -88,7 +98,7 @@ class Gameplay {
       }
       else{
       this.go = true;}
-      if (this.hpPlayer2 == "you lose") {
+      if (this.CPU == "you lose") {
         this.hpPlayer1 = "you win";
       }
     }
@@ -97,21 +107,21 @@ class Gameplay {
   heal() {
     if (this.go) {
       this.hpPlayer1 = this.reducePoint(this.hpPlayer1);
-      this.hpPlayer2 = this.hpPlayer2 + 4;
+      this.CPU = this.CPU + 4;
       
       this.go = false;
 
       if (this.hpPlayer1 == "you lose") {
-        this.hpPlayer2 = "you win";
+        this.CPU = "you win";
       }
     } 
   else {
-      this.hpPlayer2 = this.reducePoint(this.hpPlayer2);
+      this.CPU = this.reducePoint(this.CPU);
 
       this.hpPlayer1 = this.hpPlayer1 + 4;
       
       this.go = true;
-      if (this.hpPlayer2 == "you lose") {
+      if (this.CPU == "you lose") {
         this.hpPlayer1 = "you win";
       }
     }
@@ -120,11 +130,11 @@ class Gameplay {
 
   printAttacker(player1, player2) {
     if (this.go) {
-      return `${player1} attacked ${player2}`;
+      return `${player1} attacked CPU`;
     } else {
-      return `${player2} attacked ${player1}`;
+      return `CPU attacked ${player1}`;
     }
   }
 }
 
-module.exports = Gameplay;
+module.exports = SingleGame;
