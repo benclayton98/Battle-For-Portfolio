@@ -6,6 +6,8 @@ const SingleGame = require('./src/singleplay')
 const welcomeRouter = require('./routes/welcome.js')
 const attackRouter = require('./routes/attack')
 const paralyseRouter = require('./routes/paralyse')
+const poisonRouter = require ('./routes/poison')
+const healRouter = require('./routes/heal')
 
 let player1Name, player2Name, attackMessage;
 // let singleGame = new SingleGame(hpPlayer1)
@@ -35,29 +37,9 @@ app.use('/attack', attackRouter)
 
 app.use('/paralyse', paralyseRouter)
 
-app.post("/poison", (req, res) => {
-  startGame.poison();
-  attackMessage = startGame.printAttacker(player1Name, player2Name);
-  res.render("gameplay.ejs", {
-    player1Name: player1Name,
-    player2Name: player2Name,
-    hpPlayer1: startGame.hpPlayer1,
-    hpPlayer2: startGame.hpPlayer2,
-    attackMessage: attackMessage,
-  });
-});
+app.use('/poison', poisonRouter)
 
-app.post("/heal", (req, res) => {
-  startGame.heal();
-  attackMessage = startGame.printAttacker(player1Name, player2Name);
-  res.render("gameplay.ejs", {
-    player1Name: player1Name,
-    player2Name: player2Name,
-    hpPlayer1: startGame.hpPlayer1,
-    hpPlayer2: startGame.hpPlayer2,
-    attackMessage: attackMessage,
-  });
-});
+app.use('/heal', healRouter)
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
